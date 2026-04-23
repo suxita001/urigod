@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>მენიუ — URIGOD.GE</title>
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../../css/restaurant.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">URIGOD<em>.</em>GE</a>
+    <div class="nav-links">
+      <a href="../../index.html"    class="nav-link" data-i18n="nav_home">მthavari</a>
+      <a href="../../branches.html" class="nav-link" data-i18n="nav_branches">filiali</a>
+      <a href="../../map.html"      class="nav-link" data-i18n="nav_map">ruka</a>
+      <a href="/about.html"   class="nav-link" data-i18n="nav_about">ჩვენს შესახებ</a>
+    </div>
+    <div class="nav-actions">
+      <div class="lang-toggle">
+        <button class="lang-btn lang-ka" onclick="setLang('ka')">KA</button>
+        <button class="lang-btn lang-en" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()"><span class="theme-ico">🌙</span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO BAR -->
+<div class="menu-hero">
+  <div class="wrap">
+    <div class="menu-breadcrumb">
+      <a href="../../branches.html" id="bc1">yvela filiali</a>
+      <span>›</span>
+      <a href="index.html" id="bc2">restorani</a>
+      <span>›</span>
+      <span id="bc3">menu</span>
+    </div>
+    <div class="menu-hero-row">
+      <div class="menu-hero-emoji" id="mEmoji"></div>
+      <div>
+        <div class="menu-hero-name" id="mName"></div>
+        <div class="menu-hero-sub" id="mSub"></div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:10px">
+        <a href="index.html" class="btn btn-ghost btn-sm" id="mBackBtn">← <span id="m-back-txt">restorani</span></a>
+        <button class="btn btn-primary btn-sm" id="mBookBtn">📅 <span id="m-book-txt">javshni</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORY GRID -->
+<div class="wrap" style="padding-top:48px;padding-bottom:80px">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px">
+    <div class="sec-line" style="background:var(--gold)"></div>
+    <h2 style="font-family:var(--font-serif);font-size:26px;font-weight:700" id="catSectionTitle">
+      📋 <span id="catTitleTxt">menuis kategoriebi</span>
+    </h2>
+  </div>
+
+  <div class="menu-cat-grid" id="menuCatGrid"></div>
+
+  <!-- Items panel -->
+  <div class="items-panel" id="itemsPanel">
+    <div class="items-header">
+      <div class="items-header-l">
+        <span class="items-emoji" id="iEmoji"></span>
+        <div>
+          <div class="items-title" id="iTitle"></div>
+          <div class="items-count" id="iCount"></div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeItems()">
+        ✕ <span id="close-txt">daxurva</span>
+      </button>
+    </div>
+    <div class="items-grid" id="itemsGrid"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><div class="footer-logo">URIGOD<em>.</em>GE</div></div>
+    <div>
+      <div class="footer-col-ttl" data-i18n="nav_branches">nav</div>
+      <div class="footer-links">
+        <a href="index.html" class="footer-lnk" id="f-back-res">restorani</a>
+        <a href="../../branches.html" class="footer-lnk" data-i18n="nav_branches">branches</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 URIGOD.GE</span></div>
+</footer>
+
+<script src="data.js"></script>
+<script src="../../js/main.js"></script>
+<script>
+function tl(o){ return !o||typeof o==='string'?o||'':(LANG_GET()==='en'?o.en||o.ka:o.ka||o.en||''); }
+
+let openCatId = null;
+
+function renderMenu(){
+  const R=RESTAURANT, L=LANG_GET(), ka=L==='ka';
+  document.title=`${tl(R.name)} — ${ka?'მენიუ':'Menu'} — URIGOD.GE`;
+
+  // Breadcrumb
+  document.getElementById('bc1').textContent=ka?'ყველა ფილიალი':'All Branches';
+  document.getElementById('bc2').textContent=tl(R.name);
+  document.getElementById('bc3').textContent=ka?'მენიუ':'Menu';
+  document.getElementById('f-back-res').textContent=tl(R.name);
+
+  // Hero
+  document.getElementById('mEmoji').textContent=R.emoji;
+  document.getElementById('mName').textContent=`${tl(R.name)} — ${ka?'მენიუ':'Menu'}`;
+  document.getElementById('mSub').textContent=
+    `${R.menu.length} ${ka?'კატეგორია':'categories'} · ${R.menu.reduce((s,c)=>s+c.items.length,0)} ${ka?'პროდუქტი':'items'}`;
+  document.getElementById('mBookBtn').onclick=()=>openBooking(R.name,R.email,R.branches);
+  document.getElementById('m-book-txt').textContent=ka?'ჯავშანი':'Reserve';
+  document.getElementById('m-back-txt').textContent=tl(R.name);
+  document.getElementById('catTitleTxt').textContent=ka?'კატეგორიები':'Menu Categories';
+  document.getElementById('close-txt').textContent=ka?'დახურვა':'Close';
+
+  // Category cards
+  document.getElementById('menuCatGrid').innerHTML = R.menu.map((cat, i) => {
+    const img = cat.catImg
+      ? `<img src="${cat.catImg}" alt="${tl(cat.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:.5s"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+         <span class="emoji-fallback" style="display:none;font-size:56px">${cat.emoji}</span>`
+      : `<span class="emoji-fallback" style="font-size:56px">${cat.emoji}</span>`;
+    return `
+      <div class="menu-cat-card anim-scale-in${openCatId===cat.id?' active':''}"
+        style="animation-delay:${i*0.06}s"
+        onclick="openCat('${cat.id}')">
+        <div class="menu-cat-img">
+          <div class="photo-wrap" style="height:100%">${img}</div>
+          <div class="menu-cat-overlay"></div>
+        </div>
+        <div class="menu-cat-body">
+          <div class="menu-cat-name">${tl(cat.name)}</div>
+          <div class="menu-cat-count">${cat.items.length} ${ka?'პროდუქტი':'items'}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  if(openCatId) openCat(openCatId);
+}
+
+function openCat(id){
+  const R=RESTAURANT, ka=LANG_GET()==='ka';
+  openCatId=id;
+  const cat=R.menu.find(c=>c.id===id);
+  if(!cat) return;
+
+  document.querySelectorAll('.menu-cat-card').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.menu-cat-card').forEach((el,i)=>{
+    if(R.menu[i]&&R.menu[i].id===id) el.classList.add('active');
+  });
+
+  document.getElementById('iEmoji').textContent=cat.emoji;
+  document.getElementById('iTitle').textContent=tl(cat.name);
+  document.getElementById('iCount').textContent=`${cat.items.length} ${ka?'პროდუქტი':'items'}`;
+
+  document.getElementById('itemsGrid').innerHTML = cat.items.map((item, i) => {
+    const imgHtml = item.img
+      ? `<img src="${item.img}" alt="${tl(item.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+         <span class="emoji-fallback" style="display:none;font-size:40px">${cat.emoji}</span>`
+      : `<span class="emoji-fallback" style="font-size:40px">${cat.emoji}</span>`;
+    return `
+      <div class="item-card${item.popular?' popular':''} anim-scale-in" style="animation-delay:${i*0.04}s">
+        <div class="photo-wrap item-photo">${imgHtml}</div>
+        <div class="item-body">
+          ${item.popular?`<span class="item-pop-badge">🔥 ${ka?'პოპულარული':'Popular'}</span>`:''}
+          <div class="item-name">${tl(item.name)}</div>
+          <div class="item-desc">${tl(item.desc)}</div>
+          <div class="item-price">${item.price}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const panel=document.getElementById('itemsPanel');
+  panel.classList.add('open');
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'start'}),60);
+}
+
+function closeItems(){
+  document.getElementById('itemsPanel').classList.remove('open');
+  openCatId=null;
+  document.querySelectorAll('.menu-cat-card').forEach(el=>el.classList.remove('active'));
+}
+
+window.rerender = renderMenu;
+document.addEventListener('DOMContentLoaded', renderMenu);
+</script>
+</body>
+</html>

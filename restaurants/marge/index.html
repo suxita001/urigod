@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>URIGOD.GE</title>
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../../css/restaurant.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../index.html" class="nav-logo">URIGOD<em>.</em>GE</a>
+    <div class="nav-links">
+      <a href="../../index.html"    class="nav-link" data-i18n="nav_home">მთავარი</a>
+      <a href="../../branches.html" class="nav-link" data-i18n="nav_branches">ფილიალები</a>
+      <a href="../../map.html"      class="nav-link" data-i18n="nav_map">რუქა</a>
+      <a href="/about.html"   class="nav-link" data-i18n="nav_about">ჩვენს შესახებ</a>
+    </div>
+    <div class="nav-actions">
+      <div class="lang-toggle">
+        <button class="lang-btn lang-ka" onclick="setLang('ka')">KA</button>
+        <button class="lang-btn lang-en" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()"><span class="theme-ico">🌙</span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="rp-hero">
+  <div class="rp-hero-photo" id="heroPhoto">
+    <!-- JS injects <img> or leaves deco -->
+  </div>
+  <div class="rp-hero-deco" id="heroDeco"></div>
+  <div class="rp-hero-grad"></div>
+  <div class="rp-hero-content wrap">
+    <a href="../../branches.html" class="rp-back" id="backLnk">← ყველა ფილიალი</a>
+    <div class="rp-hero-main">
+      <div class="rp-emoji" id="heroEmoji"></div>
+      <div>
+        <div class="rp-badges" id="heroBadges"></div>
+        <h1 class="rp-name" id="heroName"></h1>
+        <div class="rp-sub" id="heroSub"></div>
+        <div class="rp-actions">
+          <button class="btn btn-primary btn-lg" id="heroBookBtn">
+            📅 <span id="hero-book-txt">მაგიდის ჯავshni</span>
+          </button>
+          <a href="menu.html" class="btn btn-outline btn-lg"
+            style="border-color:rgba(255,255,255,.3);color:#fff">
+            🍽️ <span id="hero-menu-txt">მენიუ</span>
+          </a>
+          <a href="#" class="btn btn-ghost btn-lg"
+            style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.8)"
+            id="heroPhone"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INFO BAR -->
+<div class="rp-infobar">
+  <div class="rp-infobar-inner" id="infoBar"></div>
+</div>
+
+<!-- CONTENT -->
+<div class="wrap">
+  <div class="rp-layout">
+    <div>
+
+      <!-- About -->
+      <div class="rp-section">
+        <div class="sec-head">
+          <div class="sec-line"></div>
+          <div class="sec-title" id="about-ttl">ჩვენს შესახებ</div>
+        </div>
+        <p id="aboutText" style="font-size:15px;color:var(--t2);line-height:1.8"></p>
+        <div class="feat-chips" id="featChips"></div>
+      </div>
+
+      <!-- Branches -->
+      <div class="rp-section">
+        <div class="sec-head">
+          <div class="sec-line"></div>
+          <div>
+            <div class="sec-title" id="branches-ttl">ფiliali</div>
+            <div class="sec-sub" id="branchSub"></div>
+          </div>
+        </div>
+        <div class="branch-list" id="branchList"></div>
+      </div>
+
+      <!-- Map -->
+      <div class="rp-section">
+        <div class="sec-head">
+          <div class="sec-line"></div>
+          <div class="sec-title" id="map-ttl">მdebareoba</div>
+        </div>
+        <div class="rp-map" id="resMap"></div>
+      </div>
+
+      <!-- Gallery -->
+      <div class="rp-section">
+        <div class="sec-head">
+          <div class="sec-line"></div>
+          <div class="sec-title" id="gall-ttl">ფoto galerea</div>
+        </div>
+        <div class="gall-grid" id="gallery"></div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="rp-sidebar">
+      <div class="sb-card">
+        <div class="sb-rating">
+          <div class="sb-num" id="sbNum"></div>
+          <div>
+            <div class="sb-stars" id="sbStars"></div>
+            <div class="sb-revs" id="sbRevs"></div>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-bottom:10px" id="sbBookBtn">
+          📅 <span id="sb-book-txt">ჯavshni</span>
+        </button>
+        <a href="menu.html" class="btn btn-outline" style="width:100%;margin-bottom:16px;justify-content:center">
+          🍽️ <span id="sb-menu-txt">sruली menu</span>
+        </a>
+        <div class="sb-info" id="sbInfo"></div>
+        <div class="sb-socials" id="sbSocials"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">URIGOD<em>.</em>GE</div>
+      <p class="footer-desc" id="f-desc">სauketeso garemosa povnashi.</p>
+    </div>
+    <div>
+      <div class="footer-col-ttl" data-i18n="nav_branches">ფiliali</div>
+      <div class="footer-links">
+        <a href="../../index.html"    class="footer-lnk" data-i18n="nav_home">home</a>
+        <a href="../../branches.html" class="footer-lnk" data-i18n="nav_branches">branches</a>
+        <a href="../../map.html"      class="footer-lnk" data-i18n="nav_map">map</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 URIGOD.GE</span>
+    <span>made with ❤️ in Georgia</span>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="data.js"></script>
+<script src="../../js/map.js"></script>
+<script src="../../js/main.js"></script>
+<script>
+function tl(o){ return !o||typeof o==='string'?o||'':(LANG_GET()==='en'?o.en||o.ka:o.ka||o.en||''); }
+
+function renderPage(){
+  const R=RESTAURANT, L=LANG_GET(), ka=L==='ka', b0=R.branches[0];
+  document.title=`${tl(R.name)} — URIGOD.GE`;
+
+  // Hero photo or deco
+  const heroPhoto=document.getElementById('heroPhoto');
+  const heroDeco=document.getElementById('heroDeco');
+  if(R.heroImg){
+    heroPhoto.innerHTML=`<img src="${R.heroImg}" alt="${tl(R.name)}" style="width:100%;height:100%;object-fit:cover"
+      onerror="this.parentNode.style.display='none';document.getElementById('heroDeco').style.opacity='.06'">`;
+    heroDeco.style.opacity='0';
+  } else {
+    heroPhoto.style.display='none';
+    heroDeco.textContent=R.emoji;
+    heroDeco.style.opacity='';
+  }
+
+  document.getElementById('heroEmoji').textContent=R.emoji;
+  document.getElementById('heroName').textContent=tl(R.name);
+  document.getElementById('heroSub').textContent=`${tl(R.cuisine)} · ★ ${R.rating} (${R.reviewCount} ${ka?'შეფასება':'reviews'})`;
+  document.getElementById('heroBadges').innerHTML=
+    (R.badge?`<span class="badge badge-red">${tl(R.badge)}</span>`:'')+
+    `<span class="badge badge-open" style="position:static">${ka?'● ღიაა':'● Open'}</span>`+
+    `<span class="badge badge-gold" style="position:static">⭐ ${R.rating}</span>`;
+  document.getElementById('heroBookBtn').onclick=()=>openBooking(R.name,R.email,R.branches);
+  document.getElementById('hero-book-txt').textContent=ka?'მაგიდის ჯავშანი':'Table Reservation';
+  document.getElementById('hero-menu-txt').textContent=ka?'მენიუ':'Menu';
+  document.getElementById('heroPhone').href=`tel:${b0.phone}`;
+  document.getElementById('heroPhone').textContent=`📞 ${b0.phone}`;
+  document.getElementById('backLnk').textContent=ka?'← ყველა ფილიალი':'← All Branches';
+
+  // Info bar
+  document.getElementById('infoBar').innerHTML=`
+    <div class="rp-info-i">🕐 ${b0.hours&&typeof b0.hours==='object'?(ka?b0.hours.ka:b0.hours.en):b0.hours}</div>
+    <div class="rp-info-i">📍 ${R.branches.length} ${ka?'ფილიალი':'branches'}</div>
+    <div class="rp-info-i">📞 <a href="tel:${b0.phone}" style="color:var(--cyan)">${b0.phone}</a></div>
+    <div class="rp-info-i" style="border-right:none">
+      <button class="btn btn-primary btn-sm"
+        onclick="openBooking(${JSON.stringify(R.name).replace(/"/g,"'")},
+          '${R.email}',JSON.parse('${JSON.stringify(R.branches).replace(/'/g,"\\'").replace(/"/g,"'")}'))">
+        📅 ${ka?'ჯავშანი':'Reserve'}
+      </button>
+    </div>`;
+
+  // About
+  document.getElementById('about-ttl').textContent=ka?'ჩვენ შესახებ':'About Us';
+  document.getElementById('aboutText').textContent=tl(R.description);
+  document.getElementById('featChips').innerHTML=R.features.map(f=>
+    `<div class="feat-chip"><span>${f.icon}</span>${ka?f.ka:f.en}</div>`).join('');
+
+  // Branches
+  document.getElementById('branches-ttl').textContent=ka?'ფილიალი':'Branches';
+  document.getElementById('branchSub').textContent=`${R.branches.length} ${ka?'ლოკაცია':'locations'}`;
+  document.getElementById('branchList').innerHTML=R.branches.map(b=>{
+    const bn=tl(b.name), ba=tl(b.address);
+    const hrs=typeof b.hours==='object'?(ka?b.hours.ka:b.hours.en):b.hours;
+    const open=b.status==='open';
+    const brJSON=JSON.stringify(R.branches).replace(/'/g,"\\'").replace(/"/g,"'");
+    return `<div class="branch-card">
+      <div class="branch-top">
+        <div><div class="branch-name">${bn}</div><div class="branch-addr">📍 ${ba}</div></div>
+        <span class="badge ${open?'badge-open':'badge-closed'}" style="position:static">
+          ${open?(ka?'● ღიაა':'● Open'):(ka?'● დახურულია':'● Closed')}
+        </span>
+      </div>
+      <div class="branch-meta">
+        <div class="branch-meta-i">🕐 ${hrs}</div>
+        <div class="branch-meta-i">📞 <a href="tel:${b.phone}" style="color:var(--cyan)">${b.phone}</a></div>
+      </div>
+      <div class="branch-actions">
+        <button class="btn btn-primary btn-sm"
+          onclick="openBooking(${JSON.stringify(R.name).replace(/"/g,"'")},
+            '${R.email}',JSON.parse('${brJSON}'),'${b.id}')">
+          📅 ${ka?'მაგიდის ჯავშანი':'Reserve here'}
+        </button>
+        <a href="https://maps.google.com/?q=${b.lat},${b.lng}" target="_blank" class="btn btn-outline btn-sm">
+          🗺️ Google Maps
+        </a>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Map
+  document.getElementById('map-ttl').textContent=ka?'მდებარეობა':'Location';
+  UrigodMap.init('resMap',{center:[b0.lat,b0.lng],zoom:14,restaurants:[R]});
+
+  // Gallery
+  document.getElementById('gall-ttl').textContent=ka?'ფოტო გალერეა':'Photo Gallery';
+  document.getElementById('gallery').innerHTML=R.gallery.map(g=>`
+    <div class="gall-item">
+      <div class="photo-wrap">
+        ${g.img
+          ? `<img src="${g.img}" alt="${tl(g.label)}" loading="lazy"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+             <span class="emoji-fallback" style="display:none">${g.emoji}</span>`
+          : `<span class="emoji-fallback">${g.emoji}</span>`
+        }
+      </div>
+      <div class="gall-lbl">${tl(g.label)}</div>
+    </div>`).join('');
+
+  // Sidebar
+  document.getElementById('sbNum').textContent=R.rating;
+  document.getElementById('sbStars').textContent='★'.repeat(Math.round(R.rating))+'☆'.repeat(5-Math.round(R.rating));
+  document.getElementById('sbRevs').textContent=`${R.reviewCount} ${ka?'შეფასება':'reviews'}`;
+  document.getElementById('sbBookBtn').onclick=()=>openBooking(R.name,R.email,R.branches);
+  document.getElementById('sb-book-txt').textContent=ka?'მაგიდის ჯავშანი':'Table Reservation';
+  document.getElementById('sb-menu-txt').textContent=ka?'სრული მენიუ':'Full Menu';
+  document.getElementById('sbInfo').innerHTML=`
+    <div class="sb-info-i"><span>📍</span>${tl(b0.address)}</div>
+    <div class="sb-info-i"><span>📧</span><a href="mailto:${R.email}" style="color:var(--cyan)">${R.email}</a></div>
+    <div class="sb-info-i"><span>🏛️</span>${ka?'დაარსებულია':'founded'} ${R.founded}</div>`;
+  const soc=[];
+  if(R.socials.facebook) soc.push(`<a href="${R.socials.facebook}" target="_blank" class="social-btn">📘 Facebook</a>`);
+  if(R.socials.instagram) soc.push(`<a href="${R.socials.instagram}" target="_blank" class="social-btn">📸 Instagram</a>`);
+  if(R.socials.tiktok) soc.push(`<a href="${R.socials.tiktok}" target="_blank" class="social-btn">🎵 TikTok</a>`);
+  document.getElementById('sbSocials').innerHTML=soc.join('');
+
+  document.getElementById('f-desc').textContent=
+    ka?'საუკეთესო გარემოს პოვნაში.':'Find the best atmosphere in Georgia.';
+}
+
+window.rerender=renderPage;
+document.addEventListener('DOMContentLoaded', renderPage);
+</script>
+</body>
+</html>

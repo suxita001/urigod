@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ფiliali — URIGOD.GE</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.branches-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;padding-bottom:80px}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
+.res-count{font-size:14px;color:var(--t2)}
+.sort-sel{background:var(--bg3);border:1px solid var(--bdr);border-radius:14px;padding:8px 14px;font-size:13px;color:var(--t1);outline:none;cursor:pointer;transition:.2s}
+.sort-sel:focus{border-color:var(--bdr-cyan)}
+.empty{text-align:center;padding:80px 20px;display:none}
+.empty-ico{font-size:56px;margin-bottom:16px}
+.empty-ttl{font-family:var(--font-serif);font-size:22px;font-weight:700;margin-bottom:8px}
+.empty-sub{color:var(--t2)}
+
+/* --- ახალი ფილტრის სტილები საიდბარისთვის --- */
+.cat-search { width: 100%; background: var(--bg3); border: 1px solid var(--bdr); border-radius: 10px; padding: 8px 12px; color: var(--t1); font-size: 13px; margin-bottom: 12px; outline: none; transition: border-color 0.2s; font-family: inherit;}
+.cat-search:focus { border-color: var(--cyan); }
+.filter-tags-scroll { display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: var(--bdr) transparent; }
+.filter-tags-scroll::-webkit-scrollbar { width: 4px; }
+.filter-tags-scroll::-webkit-scrollbar-thumb { background: var(--bdr); border-radius: 4px; }
+
+.filter-tags-scroll .tag { 
+  display: flex; align-items: center; justify-content: flex-start; text-align: left; width: 100%; 
+  padding: 8px 14px; border-radius: 12px; background: transparent; border: 1px solid var(--bdr);
+  color: var(--t2); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+}
+.filter-tags-scroll .tag:hover { background: rgba(255,255,255,0.03); border-color: var(--t3); }
+.filter-tags-scroll .tag.active { background: rgba(0,229,200,0.1); border-color: var(--cyan); color: var(--cyan); font-weight: 700; }
+
+.dual-slider { position: relative; width: 100%; height: 24px; margin: 12px 0; display: flex; align-items: center; }
+.slider-track { position: absolute; width: 100%; height: 6px; background: var(--bdr); border-radius: 4px; }
+.slider-fill { position: absolute; height: 6px; background: var(--cyan); border-radius: 4px; }
+.dual-slider input[type="range"] { position: absolute; width: 100%; appearance: none; background: none; pointer-events: none; margin: 0; outline: none; }
+.dual-slider input[type="range"]::-webkit-slider-thumb { pointer-events: auto; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--cyan); border: 2px solid var(--bg); cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.3); transition: transform 0.2s;}
+.dual-slider input[type="range"]::-webkit-slider-thumb:hover {transform: scale(1.2);}
+
+@media(max-width:960px){.branches-layout{grid-template-columns:1fr}.filter-panel{position:static}.res-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.res-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">URIGOD<em>.</em>GE</a>
+    <div class="nav-links">
+      <a href="index.html"    class="nav-link" data-i18n="nav_home">მthavari</a>
+      <a href="branches.html" class="nav-link" data-i18n="nav_branches">filiali</a>
+      <a href="map.html"      class="nav-link" data-i18n="nav_map">ruka</a>
+      <a href="about.html"    class="nav-link" data-i18n="nav_about">shesaxeb</a>
+    </div>
+    <div class="nav-actions">
+      <div class="lang-toggle">
+        <button class="lang-btn lang-ka" onclick="setLang('ka')">KA</button>
+        <button class="lang-btn lang-en" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()"><span class="theme-ico">🌙</span></button>
+      <div class="nav-search">
+        <span class="nav-search-ico">🔍</span>
+        <input type="text" data-i18n="search_ph" placeholder="..." id="hSearch">
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap pt-nav">
+  <div class="sec-head" style="margin-bottom:32px">
+    <div class="sec-line"></div>
+    <div>
+      <div class="sec-title" id="pageTitle">ჩveni filiali</div>
+      <div class="sec-sub" id="pageCount"></div>
+    </div>
+  </div>
+  <div class="branches-layout">
+    
+    <aside class="filter-panel">
+      <div class="filter-ttl">🎛️ <span id="f-ttl">filtrebi</span></div>
+      
+      <div class="filter-grp">
+        <div class="filter-grp-lbl" id="f-cuisine-lbl">samzareulo</div>
+        <input type="text" class="cat-search" id="catSearch" placeholder="🔍 ..." oninput="buildTags()">
+        <div class="filter-tags-scroll" id="cuisineTags"></div>
+      </div>
+      
+      <div class="filter-grp">
+        <div class="filter-grp-lbl" id="f-rating-lbl">reitingi</div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+          <span id="rValLbl" style="font-weight:700;"><span style="color:var(--cyan)">0.0</span> - <span style="color:var(--cyan)">5.0</span> ★</span>
+        </div>
+        <div class="dual-slider">
+          <div class="slider-track"></div>
+          <div class="slider-fill" id="sliderFill" style="left:0%; width:100%;"></div>
+          <input type="range" id="rMin" min="0" max="5" step="0.1" value="0" oninput="updateRatingSlider()">
+          <input type="range" id="rMax" min="0" max="5" step="0.1" value="5" oninput="updateRatingSlider()">
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--t3)">
+          <span>0</span>
+          <span>5</span>
+        </div>
+      </div>
+      
+      <div class="filter-grp">
+        <div class="filter-grp-lbl" id="f-status-lbl">statusi</div>
+        <label class="cb-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="onlyOpen" style="accent-color: var(--cyan); width: 16px; height: 16px;">
+          <span id="f-open-lbl" style="font-size: 13px; color: var(--t2);">🟢 mxolod Ria</span>
+        </label>
+      </div>
+      
+      <button class="btn btn-ghost" style="width:100%;margin-top:8px" id="resetBtn">
+        🔄 <span id="f-reset-lbl">gasufthaveba</span>
+      </button>
+    </aside>
+
+    <div>
+      <div class="results-bar">
+        <div class="res-count" id="resCount"></div>
+        <select class="sort-sel" id="sortSel">
+          <option value="default" id="so0">nagulisxmevi</option>
+          <option value="rating-desc" id="so1">reitingi ↓</option>
+          <option value="rating-asc"  id="so2">reitingi ↑</option>
+          <option value="name"        id="so3">saxeli a→h</option>
+        </select>
+      </div>
+      <div class="res-grid" id="resGrid"></div>
+      <div class="empty" id="emptyState">
+        <div class="empty-ico">🍽️</div>
+        <div class="empty-ttl" id="emptyTtl">ver moiZebna</div>
+        <div class="empty-sub" id="emptySub">sheccvaletit filtrebi</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><div class="footer-logo">URIGOD<em>.</em>GE</div><p class="footer-desc" id="f-desc">sauketeso garemosa povnashi.</p></div>
+    <div><div class="footer-col-ttl" data-i18n="nav_home">nav</div><div class="footer-links"><a href="index.html" class="footer-lnk" data-i18n="nav_home">home</a><a href="map.html" class="footer-lnk" data-i18n="nav_map">map</a></div></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 URIGOD.GE</span><span>made with ❤️ in Georgia</span></div>
+</footer>
+
+<link rel="stylesheet" href="/css/chatbot.css">
+<script src="/js/chatbot.js"></script>
+
+<script src="js/restaurants.js"></script>
+<script src="js/main.js"></script>
+<script>
+let activeCuisines = []; // მრავალ-მონიშვნისთვის (Multi-select)
+let minRating = 0, maxRating = 5;
+let onlyOpen = false, sortMode = 'default', searchQ = '';
+
+const params = new URLSearchParams(window.location.search);
+if(params.get('cuisine')) {
+  if (params.get('cuisine') !== 'all') {
+    activeCuisines.push(params.get('cuisine'));
+  }
+}
+if(params.get('q')) { searchQ=params.get('q'); document.getElementById('hSearch').value=searchQ; }
+
+// ── კატეგორიების რენდერი და სერჩი ──
+function buildTags() {
+  const L = LANG_GET();
+  const q = (document.getElementById('catSearch')?.value || '').toLowerCase();
+  
+  let html = '';
+  
+  // 1. "ყველა" ღილაკი მხოლოდ მაშინ ჩანს, თუ სერჩი ცარიელია
+  if (q === '') {
+    const isAllActive = activeCuisines.length === 0;
+    html += `<button class="tag${isAllActive ? ' active' : ''}" onclick="toggleCuisine('all')">🍽️ ${L === 'en' ? 'All' : 'ყველა'}</button>`;
+  }
+
+  // 2. დანარჩენი კატეგორიების ფილტრაცია სერჩის მიხედვით
+  CATEGORIES.forEach(c => {
+    if (c.id === 'all') return;
+    const name = L === 'en' ? c.en : c.ka;
+    if (name.toLowerCase().includes(q)) {
+      const isActive = activeCuisines.includes(c.id);
+      html += `<button class="tag${isActive ? ' active' : ''}" onclick="toggleCuisine('${c.id}')">${c.emoji} ${name}</button>`;
+    }
+  });
+
+  document.getElementById('cuisineTags').innerHTML = html;
+}
+
+function toggleCuisine(id) {
+  if (id === 'all') {
+    activeCuisines = [];
+  } else {
+    if (activeCuisines.includes(id)) {
+      activeCuisines = activeCuisines.filter(x => x !== id);
+    } else {
+      activeCuisines.push(id);
+    }
+  }
+  buildTags(); 
+  render();
+}
+
+// ── ორმაგი სლაიდერის ლოგიკა ──
+function updateRatingSlider() {
+  const minSlider = document.getElementById('rMin');
+  const maxSlider = document.getElementById('rMax');
+  
+  let val1 = parseFloat(minSlider.value);
+  let val2 = parseFloat(maxSlider.value);
+  
+  // გადაფარვის აკრძალვა
+  if (val1 > val2) {
+    let tmp = val1; val1 = val2; val2 = tmp;
+    minSlider.value = val1; 
+    maxSlider.value = val2;
+  }
+  
+  minRating = val1; 
+  maxRating = val2;
+  
+  document.getElementById('rValLbl').innerHTML = `<span style="color:var(--cyan)">${val1.toFixed(1)}</span> - <span style="color:var(--cyan)">${val2.toFixed(1)}</span> ★`;
+  
+  // სლაიდერის შევსება
+  const fill = document.getElementById('sliderFill');
+  const p1 = (val1 / 5) * 100;
+  const p2 = (val2 / 5) * 100;
+  fill.style.left = `${p1}%`;
+  fill.style.width = `${p2 - p1}%`;
+  
+  render();
+}
+
+// ── მთავარი რენდერის ფუნქცია ──
+function render(){
+  const L=LANG_GET(), ka=L==='ka';
+  let list=[...RESTAURANTS];
+  
+  // 1. მრავალ-კატეგორიის ფილტრი (AND ლოგიკა)
+  if(activeCuisines.length > 0) {
+    list = list.filter(r => {
+      const rTags = r.tags || [r.cuisineTag]; // უსაფრთხოებისთვის ძველ cuisineTag-საც ვამოწმებთ
+      return activeCuisines.every(t => rTags.includes(t));
+    });
+  }
+  
+  // 2. რეიტინგის ორმაგი ფილტრი
+  list = list.filter(r => r.rating >= minRating && r.rating <= maxRating);
+  
+  // 3. სტატუსი
+  if(onlyOpen) list = list.filter(r => r.status === 'open');
+  
+  // 4. ძებნა (hSearch)
+  if(searchQ){
+    const q=searchQ.toLowerCase();
+    list=list.filter(r=>tl(r.name).toLowerCase().includes(q)||tl(r.cuisine).toLowerCase().includes(q)||r.branches.some(b=>tl(b.address).toLowerCase().includes(q)));
+  }
+
+  // 5. სორტირება
+  if(sortMode==='rating-desc') list.sort((a,b)=>b.rating-a.rating);
+  if(sortMode==='rating-asc')  list.sort((a,b)=>a.rating-b.rating);
+  if(sortMode==='name')        list.sort((a,b)=>tl(a.name).localeCompare(tl(b.name)));
+
+  const grid=document.getElementById('resGrid');
+  const empty=document.getElementById('emptyState');
+  document.getElementById('resCount').textContent=`${list.length} ${ka?'რესტორანი':'venues'}`;
+
+  if(!list.length){ grid.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+
+  grid.innerHTML=list.map((r,i)=>{
+    const badge=r.badge?`<span class="badge badge-red">${tl(r.badge)}</span>`:`<span class="badge badge-open">${i18n('open')}</span>`;
+    const brJSON=JSON.stringify(r.branches).replace(/"/g,'&quot;');
+    const nameJSON=JSON.stringify(r.name).replace(/"/g,'&quot;');
+    
+    // შენი ორიგინალი HTML სტრუქტურა ბარათისთვის
+    return `<div class="res-card anim-fade-up" style="animation-delay:${i*0.05}s; cursor:pointer;" onclick="window.location.href='restaurants/${r.slug}/index.html'">
+      <div class="photo-wrap" style="aspect-ratio:16/9">
+        ${r.cover
+          ?`<img src="${r.cover}" alt="${tl(r.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="emoji-fallback" style="display:none">${r.emoji}</span>`
+          :`<span class="emoji-fallback">${r.emoji}</span>`
+        }
+        ${badge}
+      </div>
+      <div class="res-card-body">
+        <div class="res-row" style="margin-bottom:5px">
+          <div class="res-name">${tl(r.name)}</div>
+          <div class="res-rating"><span class="star">★</span>${r.rating}</div>
+        </div>
+        <div class="res-cuisine">${tl(r.cuisine)}</div>
+        <div class="res-meta">
+          <span>🕐 ${r.hours}</span>
+          <span>📍 ${r.branches.length} ${i18n('branch_lbl')}</span>
+        </div>
+        <div class="res-footer">
+          <button class="btn btn-outline btn-sm" style="flex:1"
+            onclick="event.stopPropagation(); openBooking(JSON.parse('${nameJSON.replace(/'/g,"\\'")}'),'${r.email}',${brJSON})">
+            📅 ${i18n('book_btn')}
+          </button>
+          <button class="btn btn-ghost btn-sm" style="flex:1;justify-content:center"
+            onclick="event.stopPropagation(); window.location.href='restaurants/${r.slug}/menu.html'">
+            ${i18n('menu_btn')} →
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function applyI18n(){
+  const ka=LANG_GET()==='ka';
+  document.getElementById('pageTitle').textContent=ka?'ჩვენი ფილიალები':'Our Branches';
+  document.getElementById('f-ttl').textContent=ka?'ფილტრი':'Filters';
+  document.getElementById('f-cuisine-lbl').textContent=ka?'სამზარეულო':'Cuisine';
+  document.getElementById('f-rating-lbl').textContent=ka?'რეიტინგი':'Rating';
+  document.getElementById('f-status-lbl').textContent=ka?'სტატუსი':'Status';
+  document.getElementById('f-open-lbl').textContent=ka?'🟢 მხოლოდ ღია':'🟢 Open only';
+  document.getElementById('f-reset-lbl').textContent=ka?'გასუფთავება':'Reset';
+  
+  const sInput = document.getElementById('catSearch');
+  if(sInput) sInput.placeholder = ka ? '🔍 მოძებნე კატეგორია...' : '🔍 Search category...';
+
+  document.getElementById('so0').textContent=ka?'დეფაულტი':'Default';
+  document.getElementById('so1').textContent=ka?'რეიტინგი ↓':'Rating ↓';
+  document.getElementById('so2').textContent=ka?'რეიტინგი ↑':'Rating ↑';
+  document.getElementById('so3').textContent=ka?'სახელი ა→ჰ':'Name A→Z';
+  document.getElementById('emptyTtl').textContent=ka?'ვერ მოიძებნა':'Not found';
+  document.getElementById('emptySub').textContent=ka?'შეცვალეთ ფილტრები':'Change filters';
+  document.getElementById('f-desc').textContent=ka?'საუკეთესო გარემოს პოვნაში.':'Find the best atmosphere in Georgia.';
+  buildTags(); render();
+}
+window.rerender=applyI18n;
+
+document.getElementById('onlyOpen').addEventListener('change',e=>{onlyOpen=e.target.checked;render();});
+document.getElementById('sortSel').addEventListener('change',e=>{sortMode=e.target.value;render();});
+document.getElementById('hSearch').addEventListener('input',e=>{searchQ=e.target.value;render();});
+
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  activeCuisines=[]; 
+  minRating=0; 
+  maxRating=5;
+  onlyOpen=false; 
+  sortMode='default'; 
+  searchQ='';
+  
+  document.getElementById('rMin').value=0;
+  document.getElementById('rMax').value=5;
+  updateRatingSlider(); 
+  
+  document.getElementById('catSearch').value='';
+  document.getElementById('onlyOpen').checked=false;
+  document.getElementById('sortSel').value='default';
+  document.getElementById('hSearch').value=''; 
+  
+  buildTags(); 
+  render();
+});
+
+document.addEventListener('DOMContentLoaded',()=>{ 
+  updateRatingSlider(); 
+  applyI18n(); 
+});
+</script>
+</body>
+</html>
