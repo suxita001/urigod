@@ -218,18 +218,105 @@
 
 
 
+/* ══ LAUNCH COUNTDOWN BANNER ══ */
+.launch-banner {
+  background: linear-gradient(135deg, #111111, #1a1a24);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 30px 15px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: 90px; /* თუ ნავბარი fixed არის, ეს ჩამოწევს ქვემოთ. თუ არადა წაშალე */
+  top: -51px;
+}
+.launch-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(0, 255, 204, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.launch-title {
+  font-size: 1.1rem;
+  color: #00ffcc; /* შენი საიტის Cyan ფერი */
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  z-index: 1;
+}
+.countdown {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  z-index: 1;
+}
+.cd-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px 15px;
+  min-width: 80px;
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+.cd-box:hover {
+  transform: translateY(-3px);
+}
+.cd-box span {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+  font-family: monospace;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+.cd-box small {
+  font-size: 0.75rem;
+  color: #aaa;
+  margin-top: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
+/* Light Theme Support */
+body.light .launch-banner {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+body.light .launch-banner::before {
+  background: radial-gradient(circle, rgba(230, 57, 70, 0.05) 0%, transparent 60%);
+}
+body.light .launch-title {
+  color: #e63946;
+}
+body.light .cd-box {
+  background: #fff;
+  border-color: rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+body.light .cd-box span {
+  color: #111;
+  text-shadow: none;
+}
+body.light .cd-box small {
+  color: #666;
+}
 
-
-
-
-
-
-
-
-
-
-
+@media(max-width: 480px) {
+  .cd-box { min-width: 65px; padding: 10px; }
+  .cd-box span { font-size: 1.8rem; }
+  .cd-box small { font-size: 0.65rem; }
+  .launch-title { font-size: 0.9rem; }
+}
 
 
 
