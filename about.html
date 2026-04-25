@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="ka">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NT9PP1S534"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NT9PP1S534');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>shesaxeb — URIGOD.GE</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 <style>
 .about-hero{min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:calc(var(--nav-h)+60px) 0 60px;position:relative;overflow:hidden}
 .about-hero::before{content:'🍽️';position:absolute;font-size:600px;opacity:.025;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;animation:slowspin 80s linear infinite}
@@ -22,7 +30,26 @@
 .team-card{background:var(--bg3);border:1px solid var(--bdr);border-radius:20px;padding:32px;text-align:center;transition:.3s}
 .team-card:hover{border-color:var(--bdr-cyan);transform:translateY(-4px)}
 .team-avi{width:80px;height:80px;border-radius:50%;background:var(--cyan-dim);border:2px solid var(--bdr-cyan);font-size:36px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.team-name{font-family:var(--font-serif);font-size:19px;font-weight:700;margin-bottom:3px}
+/* კონტეინერი, რომელშიც ფოტო დევს */
+.team-avi {
+  width: 100px;           /* აქ შეგიძლია ჩაწერო სასურველი ზომა */
+  height: 100px;          /* სიგანე და სიმაღლე ერთნაირი უნდა იყოს */
+  border-radius: 50%;     /* ეს აკეთებს წრეს */
+  overflow: hidden;       /* რაც წრის გარეთ გავა, ის წაიშლება */
+  border: 3px solid #eee; /* სურვილისამებრ: თეთრი/ნაცრისფერი ჩარჩო */
+  margin: 0 auto 15px;    /* ცენტრირება და ქვედა დაშორება */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* უშუალოდ ფოტოს სტილი */
+.team-avi img {
+  width: 100%;            /* იკავებს კონტეინერის სრულ სიგანეს */
+  height: 100%;           /* იკავებს კონტეინერის სრულ სიმაღლეს */
+  object-fit: cover;      /* ფოტო არ გაიწელება, ავტომატურად ჩაიჭრება ცენტრში */
+  display: block;
+}
 .team-role{font-size:13px;color:var(--cyan);margin-bottom:8px}
 .team-desc{font-size:13px;color:var(--t2)}
 @media(max-width:768px){.team-grid{grid-template-columns:1fr}}
@@ -34,8 +61,6 @@
     <a href="index.html" class="nav-logo">URIGOD<em>.</em>GE</a>
     <div class="nav-links">
       <a href="index.html"    class="nav-link" data-i18n="nav_home">mthavari</a>
-      <a href="branches.html" class="nav-link" data-i18n="nav_branches">filiali</a>
-      <a href="map.html"      class="nav-link" data-i18n="nav_map">ruka</a>
       <a href="about.html"    class="nav-link active" data-i18n="nav_about">shesaxeb</a>
     </div>
     <div class="nav-actions">
@@ -55,10 +80,6 @@
     </div>
     <h1 class="about-h1" id="ah1">gaicant<br><em>URIGOD.GE</em></h1>
     <p class="about-lead" id="alead">chveni misiaa dagexmarot sauketeso gemosa da garemosa povnashi sakartveloshi.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <a href="branches.html" class="btn btn-primary btn-lg" id="a-btn1">filialebis nakhva</a>
-      <a href="map.html"      class="btn btn-outline btn-lg" id="a-btn2">🗺️ rukhaze nakhva</a>
-    </div>
   </div>
 </section>
 
@@ -98,17 +119,40 @@
   <div class="wrap">
     <div class="sec-head"><div class="sec-line"></div><div class="sec-title" id="a-team">gundi</div></div>
     <div class="team-grid">
-      <div class="team-card"><div class="team-avi">👨‍💼</div><div class="team-name" id="tm1n">giorgi</div><div class="team-role">CEO & Co-founder</div><div class="team-desc" id="tm1d">gastronomiis entuziastsi da strategisti</div></div>
-      <div class="team-card"><div class="team-avi">👩‍💻</div><div class="team-name" id="tm2n">nino</div><div class="team-role">CTO</div><div class="team-desc" id="tm2d">tex architeqtura da produqtis dizaini</div></div>
-      <div class="team-card"><div class="team-avi">🎨</div><div class="team-name" id="tm3n">luka</div><div class="team-role">Head of Design</div><div class="team-desc" id="tm3d">UI/UX da brand identoba</div></div>
-    </div>
+    
+      <div class="team-card">
+        <div class="team-avi">
+          <img src="https://scontent.ftbs1-1.fna.fbcdn.net/v/t39.30808-6/545774731_3949868301942953_6563136300177444733_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=53a332&_nc_ohc=iXRnC7lC7RkQ7kNvwFqv9OL&_nc_oc=Adqr9zNsuolIGqRkMHQLgB218-Z2EfgTcYA3d3QSWi44fOXf4yFQBEvXVP13tFIcxY0&_nc_zt=23&_nc_ht=scontent.ftbs1-1.fna&_nc_gid=56U5-cuL9mwiQfVAnsB0RQ&_nc_ss=7b2a8&oh=00_Af0RNDDHt1eZs5cFd5eT53d7VCZN4GipNHMMBTZwx0S3EQ&oe=69F291A2" alt="nika">
+        </div>
+        <div class="team-name" id="tm1n">nika</div>
+        <div class="team-role" id="tm1n-role">CEO & Co-founder & front developer</div>
+        <div class="team-desc" id="tm1d"></div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avi">
+          <img src="https://scontent.ftbs1-2.fna.fbcdn.net/v/t39.30808-6/444213013_1178254336510103_2300098458734469834_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=1QFdnxgP30EQ7kNvwFAZXbM&_nc_oc=AdrcEN8UjbTinhJZndodS3zmZ8OMZKbhp6OU98o5wgCsQtzNMaanSyUlrRZttD41Yh4&_nc_zt=23&_nc_ht=scontent.ftbs1-2.fna&_nc_gid=mYcueWYcNFMf1OKASpzRQQ&_nc_ss=7b2a8&oh=00_Af1wu-PjWpLgk5d1IzPlHK3f4YSTN9z-Dr1DNBnw0vTjqw&oe=69F296D7" alt="nika">
+        </div>
+        <div class="team-name" id="tm2n">saba</div>
+        <div class="team-role" id="tm2n-role">CEO & Co-founder & back developer</div>
+        <div class="team-desc" id="tm2d"></div>
+      </div>
+
+      <!-- <div class="team-card">
+        <div class="team-avi">
+          <img src="" alt="nika">
+        </div>
+        <div class="team-name" id="tm3n">nina</div>
+        <div class="team-role" id="tm3n-role">Head of Design</div>
+        <div class="team-desc" id="tm3d"></div>
+      </div> -->
   </div>
 </section>
 
 <footer class="footer">
   <div class="footer-grid">
     <div><div class="footer-logo">URIGOD<em>.</em>GE</div><p class="footer-desc" id="f-desc">sauketeso garemosa povnashi.</p></div>
-    <div><div class="footer-col-ttl" data-i18n="nav_home">nav</div><div class="footer-links"><a href="index.html" class="footer-lnk" data-i18n="nav_home">home</a><a href="branches.html" class="footer-lnk" data-i18n="nav_branches">branches</a><a href="map.html" class="footer-lnk" data-i18n="nav_map">map</a></div></div>
+    <div><div class="footer-col-ttl" data-i18n="nav_home">nav</div><div class="footer-links"><a href="/index.html" class="footer-lnk" data-i18n="nav_home">home</a></div></div>
   </div>
   <div class="footer-bottom"><span>© 2026 URIGOD.GE</span><span>made with ❤️ in Georgia</span></div>
 </footer>
@@ -116,10 +160,17 @@
 <link rel="stylesheet" href="/css/chatbot.css">
 <script src="/js/chatbot.js"></script>
 
-<script src="js/main.js"></script>
+<script src="/js/main.js"></script>
 <script>
 function renderAbout(){
   const ka=LANG_GET()==='ka';
+  document.getElementById('tm1n').textContent=ka?'ნიკა':'Nika';
+  document.getElementById('tm1n-role').textContent=ka?'აღმასრულებელი დირექტორი & თანადამფუძნებელი & ფრონტ დეველოპმენტი':'CEO & Co-founder & front develope';
+  document.getElementById('tm2n').textContent=ka?'საბა':'Saba';
+  document.getElementById('tm2n-role').textContent=ka?'აღმასრულებელი დირექტორი & თანადამფუძნებელი & ბექ დეველოპმენტი':'CEO & C0-founder & back developer';
+  // document.getElementById('tm3n').textContent=ka?'ნინა':'Nina';
+  // document.getElementById('tm3n-role').textContent=ka?'მარკეტერი & კონტენტ კრეატორი':'Marketer & Content creator';
+
   document.getElementById('ah1').innerHTML=ka?'გაიცანით<br><em style="color:var(--cyan);font-style:italic">URIGOD.GE</em>':'Meet<br><em style="color:var(--cyan);font-style:italic">URIGOD.GE</em>';
   document.getElementById('alead').textContent=ka?'ჩვენი მისიაა დაგეხმაროთ საუკეთესო გარემოს პოვნაში':'Our mission is to help you find the best food and atmosphere in Georgia — in every city, every village.';
   document.getElementById('a-btn1').textContent=ka?'ფილიალების ნახვა':'See Branches';
@@ -132,7 +183,7 @@ function renderAbout(){
   document.getElementById('as3').textContent=ka?'მომხმარებლები':'Users';
   document.getElementById('as4').textContent=ka?'საშ. რეიტინგი':'Avg. Rating';
   document.getElementById('a-p1').textContent=ka?'URIGOD.GE დაარსდა 2026 წელს, როგორც პირველი კომპლექსური პლატფორმა საქართველოში, სადაც შეგიძლიათ იპოვოთ, შეამოწმოთ და დაჯავშნათ საუკეთესო რესტორნები.':'URIGOD.GE was founded in 2026 as the first comprehensive platform in Georgia where you can find, explore and book the best restaurants.';
-  document.getElementById('a-p2').textContent=ka?'ჩვენი გუნდი შედგება გასტრონომიის, ტექს და დიზაინის პროფესიონალებისგან, რომლებსაც აქვთ ერთი მიზანი: საქართველოში ყველა კუთხეში საუკეთესო სადგურების პოვნა უფრო მართლივ გაკეთდეს.':'Our team consists of gastronomy, tech, and design professionals with one goal: to make finding the best venues in every corner of Georgia effortless.';
+  document.getElementById('a-p2').textContent=ka?'ჩვენი გუნდი შედგება გასტრონომიის, ტექს და დიზაინის პროფესიონალებისგან, რომლებსაც აქვთ ერთი მიზანი: საქართველოში ყველა კუთხეში საუკეთესო ობიექტების პოვნა უფრო მარტივი გახდეს.':'Our team consists of gastronomy, tech, and design professionals with one goal: to make finding the best venues in every corner of Georgia effortless.';
   document.getElementById('f-desc').textContent=ka?'საუკეთესო გარემოცვის პოვნაში':'Find the best atmosphere in Georgia.';
   [['tl1t','URIGOD.GE launched','URIGOD.GE გაეშვა'],['tl1d','First version with 50+ restaurants','პირველი ვერსია — 50+ რესტორანი'],
    ['tl2t','10,000 users','10,000 მომხმარებელი'],['tl2d','City-by-city expansion','ქალაქ-ქალაქ გაფართოება'],
