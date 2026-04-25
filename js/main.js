@@ -1,6 +1,5 @@
 // URIGOD.GE — Global JS
 
-// ── TRANSLATIONS ─────────────────────────────────
 const TR = {
   ka:{
     nav_home:"მთავარი",nav_branches:"ფილიალები",nav_map:"რუქა",nav_about:"ჩვენს შესახებ",
@@ -13,6 +12,22 @@ const TR = {
     book_ok:"ჯავშანი გაიგზავნა!",book_err:"შეცდომა. სცადეთ ხელახლა.",
     open:"● ღიაა",closed:"● დახურ.",branch_lbl:"ფილიალი",
     menu_btn:"მენიუ",book_btn:"ჯავშანი",see_more:"ნახე მეტი →",
+    
+    // Countdown
+    launch_title:"გრანდიოზულ გაშვებამდე დარჩა:",
+    cd_days:"დღე", cd_hours:"საათი", cd_minutes:"წუთი", cd_seconds:"წამი",
+    
+    // New Sections
+    feat_title:"რატომ URIGOD.GE?",
+    feat_1_t:"მარტივი ძიება", feat_1_d:"იპოვე სასურველი ადგილი ფილტრებით და რუკით წამებში.",
+    feat_2_t:"რეალური შეფასებები", feat_2_d:"მხოლოდ ნამდვილი მომხმარებლების დატოვებული კომენტარები.",
+    feat_3_t:"სწრაფი დაჯავშნა", feat_3_d:"დაჯავშნე მაგიდა ონლაინ, ზედმეტი ზარების გარეშე.",
+    steps_title:"როგორ მუშაობს?",
+    step_1_t:"მოძებნე", step_1_d:"აირჩიე ქალაქი და სამზარეულო",
+    step_2_t:"დაჯავშნე", step_2_d:"შეარჩიე დრო და მაგიდა",
+    step_3_t:"ისიამოვნე", step_3_d:"გაატარე დრო საუკეთესოდ",
+    sub_title:"გამოიწერე სიახლეები", sub_desc:"არ გამოტოვო ახალი რესტორნები და ექსკლუზიური შეთავაზებები.",
+    sub_ph:"შენი ელ-ფოსტა...", sub_btn:"გამოწერა", sub_ok:"წარმატებით გამოიწერეთ სიახლეები!"
   },
   en:{
     nav_home:"Home",nav_branches:"Branches",nav_map:"Map",nav_about:"About",
@@ -25,6 +40,22 @@ const TR = {
     book_ok:"Reservation sent!",book_err:"Error. Please try again.",
     open:"● Open",closed:"● Closed",branch_lbl:"Branch",
     menu_btn:"Menu",book_btn:"Reserve",see_more:"See more →",
+    
+    // Countdown
+    launch_title:"GRAND LAUNCH IN:",
+    cd_days:"Days", cd_hours:"Hours", cd_minutes:"Mins", cd_seconds:"Secs",
+    
+    // New Sections
+    feat_title:"Why URIGOD.GE?",
+    feat_1_t:"Easy Search", feat_1_d:"Find your desired place with filters and maps in seconds.",
+    feat_2_t:"Real Reviews", feat_2_d:"Comments and ratings left only by real customers.",
+    feat_3_t:"Quick Booking", feat_3_d:"Book a table online without unnecessary calls.",
+    steps_title:"How it works?",
+    step_1_t:"Search", step_1_d:"Choose city and cuisine",
+    step_2_t:"Book", step_2_d:"Select time and table",
+    step_3_t:"Enjoy", step_3_d:"Have the best time",
+    sub_title:"Subscribe to News", sub_desc:"Don't miss out on new restaurants and exclusive offers.",
+    sub_ph:"Your email...", sub_btn:"Subscribe", sub_ok:"Successfully subscribed!"
   }
 };
 
@@ -32,8 +63,7 @@ let LANG  = localStorage.getItem('ug_lang')  || 'ka';
 let THEME = localStorage.getItem('ug_theme') || 'dark';
 
 function i18n(k){ return (TR[LANG]||TR.ka)[k]||k; }
-window.i18n  = i18n;
-window.LANG_GET = ()=>LANG;
+window.i18n  = i18n; window.LANG_GET = ()=>LANG;
 
 function applyLang(){
   document.documentElement.lang = LANG;
@@ -45,11 +75,7 @@ function applyLang(){
   document.querySelectorAll('.lang-ka').forEach(b=>b.classList.toggle('active',LANG==='ka'));
   document.querySelectorAll('.lang-en').forEach(b=>b.classList.toggle('active',LANG==='en'));
 }
-function setLang(l){
-  LANG=l; localStorage.setItem('ug_lang',l);
-  applyLang();
-  if(typeof window.rerender==='function') window.rerender();
-}
+function setLang(l){ LANG=l; localStorage.setItem('ug_lang',l); applyLang(); if(typeof window.rerender==='function') window.rerender(); }
 window.setLang=setLang;
 
 function applyTheme(){
@@ -57,14 +83,9 @@ function applyTheme(){
   document.querySelectorAll('.theme-ico').forEach(el=>el.textContent=THEME==='dark'?'🌙':'☀️');
   if(typeof window.rerenderMap==='function') window.rerenderMap();
 }
-function toggleTheme(){
-  THEME=THEME==='dark'?'light':'dark';
-  localStorage.setItem('ug_theme',THEME);
-  applyTheme();
-}
+function toggleTheme(){ THEME=THEME==='dark'?'light':'dark'; localStorage.setItem('ug_theme',THEME); applyTheme(); }
 window.toggleTheme=toggleTheme;
 
-// nav active
 function setNavActive(){
   const curr=window.location.pathname.split('/').pop()||'index.html';
   document.querySelectorAll('.nav-link').forEach(a=>{
@@ -73,7 +94,6 @@ function setNavActive(){
   });
 }
 
-// search enter
 document.addEventListener('keydown',e=>{
   if(e.key!=='Enter'||!e.target.matches('.nav-search input')) return;
   const q=e.target.value.trim(); if(!q) return;
@@ -82,146 +102,38 @@ document.addEventListener('keydown',e=>{
   window.location.href=`${base}?q=${encodeURIComponent(q)}`;
 });
 
-// ── TOAST ─────────────────────────────────────────
 function showToast(icon,msg,type='ok'){
   let el=document.getElementById('_toast');
   if(!el){el=document.createElement('div');el.id='_toast';el.className='toast';el.innerHTML='<span class="t-ico"></span><span class="t-msg"></span>';document.body.appendChild(el);}
-  el.className=`toast ${type}`;
-  el.querySelector('.t-ico').textContent=icon;
-  el.querySelector('.t-msg').textContent=msg;
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t=setTimeout(()=>el.classList.remove('show'),4000);
+  el.className=`toast ${type}`; el.querySelector('.t-ico').textContent=icon; el.querySelector('.t-msg').textContent=msg;
+  el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),4000);
 }
 window.showToast=showToast;
 
-// ── BOOKING MODAL ─────────────────────────────────
-function buildModal(){
-  if(document.getElementById('_bk_overlay')) return;
-  document.body.insertAdjacentHTML('beforeend',`
-<div class="modal-overlay" id="_bk_overlay" onclick="if(event.target===this)closeBooking()">
-  <div class="modal">
-    <div class="modal-head">
-      <div>
-        <div class="modal-title" data-i18n="book_title">${i18n('book_title')}</div>
-        <div class="modal-sub" id="_bk_rname"></div>
-      </div>
-      <button class="modal-x" onclick="closeBooking()">✕</button>
-    </div>
-    <form id="_bk_form" class="modal-body" onsubmit="submitBooking(event)" novalidate>
-      <div id="_bk_branch_row" class="form-group" style="display:none">
-        <label class="form-label" data-i18n="book_branch">${i18n('book_branch')}</label>
-        <select id="_bk_branch_sel" name="branch_id" class="form-select form-input"></select>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">${i18n('book_name')} *</label>
-          <input type="text" name="name" class="form-input" required placeholder="გიორგი მაისურაძე">
-        </div>
-        <div class="form-group">
-          <label class="form-label">${i18n('book_phone')} *</label>
-          <input type="tel" name="phone" class="form-input" required placeholder="+995 5XX XXX XXX">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">${i18n('book_email')}</label>
-        <input type="email" name="email" class="form-input" placeholder="mail@gmail.com">
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">${i18n('book_date')} *</label>
-          <input type="date" name="date" class="form-input" required min="${new Date().toISOString().split('T')[0]}">
-        </div>
-        <div class="form-group">
-          <label class="form-label">${i18n('book_time')} *</label>
-          <input type="time" name="time" class="form-input" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">${i18n('book_guests')} *</label>
-        <select name="guests" class="form-select form-input" required>
-          <option value="">-- ${LANG==='en'?'Select':'აირჩიეთ'} --</option>
-          ${[1,2,3,4,5,6,7,8].map(n=>`<option value="${n}">${n} ${LANG==='en'?'guests':'სტუმარი'}</option>`).join('')}
-          <option value="9+">9+ ${LANG==='en'?'guests':'სტუმარი'}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label" data-i18n="book_notes">${i18n('book_notes')}</label>
-        <textarea name="notes" class="form-textarea" data-i18n="book_notes_ph" placeholder="${i18n('book_notes_ph')}"></textarea>
-      </div>
-    </form>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeBooking()" data-i18n="book_cancel">${i18n('book_cancel')}</button>
-      <button class="btn btn-primary" id="_bk_sub" type="submit" form="_bk_form" data-i18n="book_submit">${i18n('book_submit')}</button>
-    </div>
-  </div>
-</div>`);
+// Countdown Init
+function initCountdown() {
+  const targetDate = new Date("2026-05-04T12:00:00+04:00").getTime();
+  const timer = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+    const elDays = document.getElementById("cd-days");
+    if (!elDays) return; 
+    if (distance < 0) {
+      clearInterval(timer);
+      elDays.innerText = "00"; document.getElementById("cd-hours").innerText = "00";
+      document.getElementById("cd-minutes").innerText = "00"; document.getElementById("cd-seconds").innerText = "00";
+      return;
+    }
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    elDays.innerText = days < 10 ? '0' + days : days;
+    document.getElementById("cd-hours").innerText = hours < 10 ? '0' + hours : hours;
+    document.getElementById("cd-minutes").innerText = minutes < 10 ? '0' + minutes : minutes;
+    document.getElementById("cd-seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
+  }, 1000);
 }
 
-
-
-function openBooking(rName, rEmail, branches, preId){
-  buildModal();
-  const ov=document.getElementById('_bk_overlay');
-  ov.dataset.email=rEmail;
-  const name=typeof rName==='object'?(LANG==='en'?rName.en:rName.ka):rName;
-  ov.dataset.rname=name;
-  document.getElementById('_bk_rname').textContent=name;
-
-  const row=document.getElementById('_bk_branch_row');
-  const sel=document.getElementById('_bk_branch_sel');
-  if(branches && branches.length>1){
-    row.style.display='block';
-    sel.innerHTML=branches.map(b=>{
-      const bn=typeof b.name==='object'?(LANG==='en'?b.name.en:b.name.ka):b.name;
-      return `<option value="${b.id}"${preId===b.id?' selected':''}>${bn}</option>`;
-    }).join('');
-  } else if(branches && branches.length===1){
-    row.style.display='none';
-    sel.innerHTML=`<option value="${branches[0].id}"></option>`;
-  } else { row.style.display='none'; }
-
-  document.getElementById('_bk_form').reset();
-  if(preId) sel.value=preId;
-  document.querySelector('#_bk_form [name=date]').min=new Date().toISOString().split('T')[0];
-  requestAnimationFrame(()=>ov.classList.add('open'));
-  document.body.style.overflow='hidden';
-}
-function closeBooking(){
-  const el=document.getElementById('_bk_overlay');
-  if(el) el.classList.remove('open');
-  document.body.style.overflow='';
-}
-async function submitBooking(e){
-  e.preventDefault();
-  const ov=document.getElementById('_bk_overlay');
-  const data=Object.fromEntries(new FormData(e.target));
-  if(!data.name||!data.phone||!data.date||!data.time||!data.guests){
-    showToast('⚠️',LANG==='en'?'Fill required fields':'შეავსეთ სავ. ველები','err'); return;
-  }
-  const btn=document.getElementById('_bk_sub');
-  btn.disabled=true; btn.textContent=i18n('book_sending');
-
-  if(window.emailjs&&window.EMAILJS_SID&&window.EMAILJS_TID){
-    try{
-      await emailjs.send(window.EMAILJS_SID,window.EMAILJS_TID,{
-        to_email:ov.dataset.email, restaurant:ov.dataset.rname,
-        branch:data.branch_id||'', guest_name:data.name,
-        guest_phone:data.phone, guest_email:data.email||'',
-        date:data.date, time:data.time, guests:data.guests, notes:data.notes||'—'
-      });
-      showToast('✅',i18n('book_ok'),'ok'); closeBooking();
-    } catch{ showToast('❌',i18n('book_err'),'err'); }
-  } else {
-    const subj=encodeURIComponent(`Reservation — ${ov.dataset.rname}`);
-    const body=encodeURIComponent(`Name: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email||'—'}\nDate: ${data.date}\nTime: ${data.time}\nGuests: ${data.guests}\nBranch: ${data.branch_id||'—'}\nNotes: ${data.notes||'—'}`);
-    window.open(`mailto:${ov.dataset.email}?subject=${subj}&body=${body}`,'_blank');
-    showToast('✅',i18n('book_mailto')||'Mail opened','ok'); closeBooking();
-  }
-  btn.disabled=false; btn.textContent=i18n('book_submit');
-}
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeBooking(); });
-window.openBooking=openBooking; window.closeBooking=closeBooking; window.submitBooking=submitBooking;
-
-// ── INIT ──────────────────────────────────────────
-document.addEventListener('DOMContentLoaded',()=>{ applyTheme(); applyLang(); setNavActive(); });
+document.addEventListener('DOMContentLoaded',()=>{ applyTheme(); applyLang(); setNavActive(); initCountdown(); });
