@@ -213,3 +213,90 @@
   .hero-stats-bar { display: none; }
   .slide-label { display: none; }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ══ COUNTDOWN BANNER ══ */
+.launch-banner {
+  background: linear-gradient(135deg, #111111, #1a1a24);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 30px 15px; text-align: center; display: flex;
+  flex-direction: column; align-items: center; position: relative;
+  overflow: hidden; margin-top: 60px;
+}
+.launch-title { font-size: 1.1rem; color: var(--cyan, #00ffcc); margin-bottom: 15px; text-transform: uppercase; font-weight: 600; z-index: 1; }
+.countdown { display: flex; gap: 15px; z-index: 1; justify-content: center;}
+.cd-box { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px 15px; min-width: 80px; display: flex; flex-direction: column; align-items: center; transition: transform 0.3s; }
+.cd-box:hover { transform: translateY(-3px); }
+.cd-box span { font-size: 2.2rem; font-weight: 700; color: #fff; font-family: monospace; line-height: 1; }
+.cd-box small { font-size: 0.75rem; color: #aaa; margin-top: 5px; text-transform: uppercase; }
+
+/* ══ NEW SECTIONS COMMON ══ */
+.new-container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+.sec-title { text-align: center; font-size: 2rem; margin-bottom: 40px; color: #fff; font-weight: 700; }
+
+/* ══ FEATURES ══ */
+.features-sec { background: var(--bg-alt, #151515); }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+.feat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 30px; text-align: center; transition: 0.3s; }
+.feat-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.06); border-color: var(--cyan, #00ffcc); }
+.feat-icon { font-size: 3rem; margin-bottom: 20px; }
+.feat-card h3 { color: #fff; margin-bottom: 10px; font-size: 1.3rem; }
+.feat-card p { color: #aaa; font-size: 0.95rem; line-height: 1.5; }
+
+/* ══ STEPS ══ */
+.steps-sec { background: var(--bg, #0a0a0a); border-bottom: 1px solid rgba(255,255,255,0.05); }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: center; position: relative; }
+.step-item { position: relative; z-index: 2; }
+.step-num { width: 60px; height: 60px; background: var(--cyan, #00ffcc); color: #000; font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 20px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
+.step-item h3 { color: #fff; font-size: 1.3rem; margin-bottom: 10px; }
+.step-item p { color: #aaa; font-size: 0.95rem; }
+
+/* ══ SUBSCRIBE ══ */
+.subscribe-sec { background: linear-gradient(135deg, rgba(0, 255, 204, 0.1), transparent); padding: 40px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.sub-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 30px; padding: 40px 20px; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+.sub-text h2 { color: #fff; font-size: 1.8rem; margin-bottom: 10px; }
+.sub-text p { color: #aaa; }
+.sub-form { display: flex; gap: 10px; flex: 1; min-width: 300px; max-width: 500px; }
+.sub-form input { flex: 1; padding: 12px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; outline: none; }
+.sub-form input:focus { border-color: var(--cyan, #00ffcc); }
+
+/* ══ LIGHT THEME OVERRIDES ══ */
+body.light .launch-banner { background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-color: rgba(0,0,0,0.05); }
+body.light .launch-title { color: #e63946; }
+body.light .cd-box { background: #fff; border-color: rgba(0,0,0,0.1); }
+body.light .cd-box span { color: #111; }
+body.light .cd-box small { color: #666; }
+body.light .sec-title, body.light .feat-card h3, body.light .step-item h3, body.light .sub-text h2 { color: #111; }
+body.light .features-sec { background: #f8f9fa; }
+body.light .steps-sec { background: #fff; border-color: rgba(0,0,0,0.1); }
+body.light .feat-card { background: #fff; border-color: rgba(0,0,0,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+body.light .feat-card:hover { border-color: #e63946; }
+body.light .feat-card p, body.light .step-item p, body.light .sub-text p { color: #666; }
+body.light .step-num { background: #e63946; color: #fff; box-shadow: 0 0 20px rgba(230, 57, 70, 0.4); }
+body.light .subscribe-sec { background: linear-gradient(135deg, rgba(230, 57, 70, 0.05), transparent); border-color: rgba(0,0,0,0.1); }
+body.light .sub-inner { background: #fff; border-color: rgba(0,0,0,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+body.light .sub-form input { background: #f8f9fa; border-color: rgba(0,0,0,0.1); color: #111; }
+body.light .sub-form input:focus { border-color: #e63946; }
+
+@media(max-width: 768px) {
+  .sub-inner { flex-direction: column; text-align: center; }
+  .sub-form { width: 100%; }
+}
