@@ -388,3 +388,108 @@ body.light .sub-form input:focus { border-color: #e63946; }
   .sub-inner { flex-direction: column; text-align: center; }
   .sub-form { width: 100%; }
 }
+
+
+
+/* დესკტოპზე ჰამბურგერი უნდა დავმალოთ */
+.hamburger {
+  display: none;
+  font-size: 28px;
+  color: var(--cyan, #00ffcc);
+  cursor: pointer;
+  margin-left: 10px;
+  user-select: none;
+}
+
+/* ══ MOBILE RESPONSIVE OPTIMIZATIONS (ტელეფონებისთვის) ══ */
+@media (max-width: 768px) {
+  /* ── ნავბარი და ჰამბურგერ მენიუ ── */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; width: 100%;
+    z-index: 9999;
+    background: #0a0a0a; /* მყარი შავი ფონი, რომ სურათმა არ გადაფაროს */
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .hamburger {
+    display: block; /* მობილურზე ვაჩენთ აიქონს */
+  }
+  .nav-inner {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* ლინკების დამალვა და ჩამოსაშლელად მომზადება */
+  .nav-links {
+    display: none; 
+    position: absolute;
+    top: 100%; /* ნავბარის ზუსტად ქვემოთ */
+    left: 0;
+    width: 100%;
+    background: #0a0a0a;
+    flex-direction: column;
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  }
+  
+  /* როცა აიქონს დავაჭერთ, ეს კლასი დაემატება და გამოაჩენს */
+  .nav-links.active {
+    display: flex;
+  }
+  .nav-links a {
+    padding: 15px;
+    font-size: 1.2rem;
+  }
+
+  .nav-search { display: none; } /* ძებნას ვმალავთ */
+
+  /* ── HERO სექციის და Countdown-ის სიმაღლეების დარეგულირება ── */
+  .hero {
+    margin-top: 0 !important; 
+    padding-top: 70px; /* ნავბარის ადგილი გამოვტოვეთ */
+    height: 70vh !important; /* 100-ის ნაცვლად 70%, რომ ქვემოთ ადგილი დარჩეს */
+    min-height: auto !important;
+    align-items: center; 
+  }
+  .hero-content {
+    padding-bottom: 0;
+    text-align: center;
+  }
+  .hero-h1 {
+    font-size: clamp(32px, 9vw, 42px);
+  }
+  .hero-arrow, .slide-label, .hero-stats-bar {
+    display: none; 
+  }
+
+  /* Countdown დადგება ზუსტად დარჩენილ ადგილას */
+  .launch-banner {
+    margin-top: 0 !important;
+    min-height: 25vh; /* იკავებს ეკრანის დარჩენილ ნაწილს */
+    display: flex;
+    justify-content: center;
+    border-radius: 0;
+  }
+  
+  /* ეს ჩაწევს "რატომ URIGOD.GE" სექციას ქვემოთ, რომ ეკრანზე არ გამოჩნდეს */
+  .marquee-sec {
+    margin-bottom: 40px; 
+  }
+
+  /* ── დანარჩენი დეტალები ── */
+  .features-grid, .steps-grid { gap: 20px; }
+  .sub-inner { flex-direction: column; text-align: center; }
+  .sub-form { width: 100%; flex-direction: column; }
+  .sub-form input, .sub-form button { width: 100%; }
+  .footer-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .countdown { flex-wrap: wrap; justify-content: center; }
+  .cd-box { min-width: 60px; padding: 8px; }
+  .cd-box span { font-size: 1.4rem; }
+}
