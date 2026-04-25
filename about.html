@@ -139,14 +139,6 @@
         <div class="team-desc" id="tm2d"></div>
       </div>
 
-      <!-- <div class="team-card">
-        <div class="team-avi">
-          <img src="" alt="nika">
-        </div>
-        <div class="team-name" id="tm3n">nina</div>
-        <div class="team-role" id="tm3n-role">Head of Design</div>
-        <div class="team-desc" id="tm3d"></div>
-      </div> -->
   </div>
 </section>
 
@@ -164,12 +156,9 @@
 function renderAbout(){
   const ka=LANG_GET()==='ka';
   document.getElementById('tm1n').textContent=ka?'ნიკა':'Nika';
-  document.getElementById('tm1n-role').textContent=ka?'აღმასრულებელი დირექტორი & თანადამფუძნებელი & ფრონტ დეველოპმენტი':'CEO & Co-founder & front develope';
+  document.getElementById('tm1n-role').textContent=ka?'CEO & Co-founder & front develope':'CEO & Co-founder & front develope';
   document.getElementById('tm2n').textContent=ka?'საბა':'Saba';
-  document.getElementById('tm2n-role').textContent=ka?'აღმასრულებელი დირექტორი & თანადამფუძნებელი & ბექ დეველოპმენტი':'CEO & C0-founder & back developer';
-  // document.getElementById('tm3n').textContent=ka?'ნინა':'Nina';
-  // document.getElementById('tm3n-role').textContent=ka?'მარკეტერი & კონტენტ კრეატორი':'Marketer & Content creator';
-
+  document.getElementById('tm2n-role').textContent=ka?'CEO & C0-founder & back developer':'CEO & C0-founder & back developer';
   document.getElementById('ah1').innerHTML=ka?'გაიცანით<br><em style="color:var(--cyan);font-style:italic">URIGOD.GE</em>':'Meet<br><em style="color:var(--cyan);font-style:italic">URIGOD.GE</em>';
   document.getElementById('alead').textContent=ka?'ჩვენი მისიაა დაგეხმაროთ საუკეთესო გარემოს პოვნაში':'Our mission is to help you find the best food and atmosphere in Georgia — in every city, every village.';
   document.getElementById('a-who').textContent=ka?'ვინ ვართ ჩვენ?':'Who are we?';
