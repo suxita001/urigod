@@ -2,11 +2,11 @@
 // URIGOD.GE — Restaurant Registry & Categories
 // ══════════════════════════════════════════════════════════
 
-const HERO_SLIDES = [
-  { img: "https://i.natgeofe.com/n/aed9f829-849c-4902-88bb-27e570c2a398/GettyImages-180258510.jpg", label: { ka: "ქართული სამზარეულო", en: "Georgian Cuisine" } },
-  { img: "https://hotsale.ge/files/offers/aqciebi/kveba/oishi/43.jpg", label: { ka: "აზიური არომატები",   en: "Asian Flavours"  } },
-  { img: "https://hotsale.ge/files/offers/kolkheti2/33-1.jpg", label: { ka: "თბილისი ღამით",       en: "Tbilisi by Night"} },
-];
+// const HERO_SLIDES = [
+//   { img: "https://i.natgeofe.com/n/aed9f829-849c-4902-88bb-27e570c2a398/GettyImages-180258510.jpg", label: { ka: "ქართული სამზარეულო", en: "Georgian Cuisine" } },
+//   { img: "https://hotsale.ge/files/offers/aqciebi/kveba/oishi/43.jpg", label: { ka: "აზიური არომატები",   en: "Asian Flavours"  } },
+//   { img: "https://hotsale.ge/files/offers/kolkheti2/33-1.jpg", label: { ka: "თბილისი ღამით",       en: "Tbilisi by Night"} },
+// ];
 
 const CATEGORIES = [
   { id:"all",      ka:"ყველა",        en:"All",        emoji:"🍽️" },
