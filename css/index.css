@@ -231,7 +231,7 @@
   position: relative;
   overflow: hidden;
   margin-top: 90px; /* თუ ნავბარი fixed არის, ეს ჩამოწევს ქვემოთ. თუ არადა წაშალე */
-  top: -61px;
+  top: -51px;
 }
 .launch-banner::before {
   content: '';
