@@ -112,7 +112,7 @@ window.showToast=showToast;
 
 // Countdown Init
 function initCountdown() {
-  const targetDate = new Date("2026-05-04T12:00:00+04:00").getTime();
+  const targetDate = new Date("2026-06-01T12:00:00+04:00").getTime();
   const timer = setInterval(() => {
     const now = new Date().getTime();
     const distance = targetDate - now;
