@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Dashboard — URIGOD.GE</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { margin: 0; padding: 0; display: flex; height: 100vh; overflow: hidden; background: var(--bg); color: var(--t1); font-family: var(--font-sans); }
+  
+  /* Sidebar */
+  .sidebar { width: 280px; background: var(--bg2); border-right: 1px solid var(--bdr); display: flex; flex-direction: column; padding: 24px; flex-shrink: 0; }
+  .sb-logo { font-family: var(--font-serif); font-size: 24px; color: var(--cyan); margin-bottom: 40px; font-weight: 900; letter-spacing: 1px; }
+  .sb-logo em { color: #fff; font-style: normal; }
+  .sb-menu { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .sb-link { padding: 14px 18px; border-radius: 14px; color: var(--t2); text-decoration: none; font-weight: bold; font-size: 15px; display: flex; align-items: center; gap: 12px; transition: .2s; border: 1px solid transparent; cursor: pointer; }
+  .sb-link:hover { background: var(--glass2); color: var(--t1); }
+  .sb-link.active { background: var(--cyan-d); color: var(--cyan); border-color: var(--bdr-cyan); }
+  .sb-bottom { margin-top: auto; border-top: 1px solid var(--bdr); padding-top: 20px; }
+  
+  /* Main Content */
+  .main-content { flex: 1; overflow-y: auto; padding: 40px; background: var(--bg); }
+  .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--bdr); }
+  .page-title { font-size: 28px; font-weight: 800; font-family: var(--font-serif); }
+  .badge-count { background: var(--cyan); color: #000; padding: 2px 10px; border-radius: 100px; font-size: 14px; margin-left: 10px; vertical-align: middle; }
+  
+  /* Search input */
+  .admin-search-bar { width: 100%; background: var(--bg2); border: 1px solid var(--bdr); border-radius: 14px; padding: 12px 16px; color: var(--t1); font-size: 14px; outline: none; margin-bottom: 24px; font-family: inherit; box-sizing: border-box; }
+  .admin-search-bar:focus { border-color: var(--cyan); }
+
+  /* Grid System */
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+  
+  /* Cards */
+  .rv-card { background: var(--bg2); border: 1px solid var(--bdr); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; transition: transform .2s, border-color .2s; }
+  .rv-card:hover { transform: translateY(-4px); border-color: var(--cyan); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+  .rv-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+  .rv-user { display: flex; align-items: center; gap: 12px; }
+  .rv-avi { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 2px solid var(--cyan); flex-shrink: 0; }
+  .rv-name { font-weight: 800; font-size: 15px; margin-bottom: 4px; }
+  .rv-date { font-size: 12px; color: var(--t3); }
+  .rv-target { display: inline-block; background: rgba(0,200,170,.1); color: var(--cyan); padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; margin-bottom: 16px; border: 1px solid var(--bdr-cyan); }
+  .rv-stars { color: var(--gold); letter-spacing: 2px; font-size: 16px; margin-bottom: 12px; }
+  .rv-text { font-size: 14px; color: var(--t2); line-height: 1.6; background: var(--bg3); padding: 16px; border-radius: 12px; flex: 1; margin-bottom: 20px; border: 1px solid var(--bdr2); }
+  
+  .rv-actions { display: flex; gap: 12px; }
+  .btn-rj { flex: 1; background: rgba(239,68,68,.1); color: #ef4444; border: 1px solid rgba(239,68,68,.3); padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: .2s; text-align: center; }
+  .btn-rj:hover { background: #ef4444; color: #fff; }
+  .btn-ap { flex: 1; background: rgba(34,197,94,.1); color: #22c55e; border: 1px solid rgba(34,197,94,.3); padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: .2s; text-align: center; }
+  .btn-ap:hover { background: #22c55e; color: #000; }
+
+  .empty-state { grid-column: 1 / -1; text-align: center; padding: 100px 20px; color: var(--t3); }
+  .empty-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.5; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sb-logo">URIGOD<em>.</em>GE <span style="font-size:10px; vertical-align:top; color:var(--red);">ADMIN</span></div>
+  
+  <div class="sb-menu">
+    <div id="menu-pending" class="sb-link active" onclick="switchSection('pending')">
+      <span>📥</span> მოლოდინში
+    </div>
+    <div id="menu-all" class="sb-link" onclick="switchSection('all')">
+      <span>💬</span> ყველა შეფასება
+    </div>
+    <div class="sb-link" onclick="alert('მალე დაემატება!')">
+      <span>📊</span> სტატისტიკა
+    </div>
+  </div>
+
+  <div class="sb-bottom">
+    <a href="/index.html" class="sb-link" style="padding:0; background:none; border:none;">
+      <span>←</span> საიტზე დაბრუნება
+    </a>
+  </div>
+</aside>
+
+<main class="main-content">
+  <div class="page-header">
+    <div class="page-title" id="section-title">
+      მოლოდინში მყოფი კომენტარები <span class="badge-count" id="badge-count">0</span>
+    </div>
+    <div style="color:var(--t3); font-size:14px;">ადმინისტრატორის პანელი</div>
+  </div>
+
+  <input type="text" id="adminSearch" class="admin-search-bar" style="display:none;" placeholder="მოძებნე იუზერის სახელით ან კომენტარის ტექსტით..." oninput="filterReviewsLocal()">
+
+  <div class="reviews-grid" id="reviews-container">
+    <div class="empty-state">იტვირთება მონაცემები...</div>
+  </div>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="/js/auth.js"></script>
+
+<script>
+let db = null;
+let currentSection = 'pending'; // 'pending' ან 'all'
+let allLoadedReviews = []; // ლოკალური ქეში სერჩისთვის
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const u = JSON.parse(localStorage.getItem('ug_user') || 'null');
+    if (!u || !u.email || (typeof ADMIN_EMAILS !== 'undefined' && !ADMIN_EMAILS.includes(u.email.toLowerCase()))) {
+      alert("⚠️ წვდომა შეზღუდულია!");
+      window.location.href = '/index.html';
+      return;
+    }
+    
+    if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+      db = firebase.firestore();
+      loadSectionData();
+    }
+  }, 1000);
+});
+
+function switchSection(section) {
+  currentSection = section;
+  document.querySelectorAll('.sb-link').forEach(el => el.classList.remove('active'));
+  
+  if (section === 'pending') {
+    document.getElementById('menu-pending').classList.add('active');
+    document.getElementById('adminSearch').style.display = 'none';
+    document.getElementById('section-title').innerHTML = `მოლოდინში მყოფი კომენტარები <span class="badge-count" id="badge-count">0</span>`;
+  } else {
+    document.getElementById('menu-all').classList.add('active');
+    document.getElementById('adminSearch').style.display = 'block';
+    document.getElementById('adminSearch').value = '';
+    document.getElementById('section-title').innerHTML = `ყველა დამტკიცებული შეფასება <span class="badge-count" id="badge-count">0</span>`;
+  }
+  loadSectionData();
+}
+
+function loadSectionData() {
+  const container = document.getElementById('reviews-container');
+  container.innerHTML = '<div class="empty-state">იტვირთება მონაცემები...</div>';
+  
+  if (currentSection === 'pending') {
+    // 1. მოლოდინში მყოფების წამოღება
+    db.collection("reviews").where("status", "==", "pending").orderBy("createdAt", "desc")
+      .onSnapshot((snap) => {
+        if (currentSection !== 'pending') return;
+        document.getElementById('badge-count').textContent = snap.size;
+
+        if (snap.empty) {
+          container.innerHTML = `<div class="empty-state"><div class="empty-icon">🎉</div><h2>ყველაფერი სუფთაა!</h2><p>დასამტკიცებელი კომენტარები არ არის.</p></div>`;
+          return;
+        }
+
+        let html = '';
+        snap.forEach((doc) => {
+          html += buildCardHTML(doc.id, doc.data(), true);
+        });
+        container.innerHTML = html;
+      });
+  } else {
+    // 2. ყველა დამტკიცებულის წამოღება
+    db.collection("reviews").where("status", "==", "approved").orderBy("createdAt", "desc")
+      .onSnapshot((snap) => {
+        if (currentSection !== 'all') return;
+        document.getElementById('badge-count').textContent = snap.size;
+
+        if (snap.empty) {
+          container.innerHTML = `<div class="empty-state"><div class="empty-icon">🍽️</div><h2>ცარიელია</h2><p>ჯერჯერობით არცერთი დამტკიცებული კომენტარი არ არის საიტზე.</p></div>`;
+          return;
+        }
+
+        allLoadedReviews = [];
+        let html = '';
+        snap.forEach((doc) => {
+          const data = doc.data();
+          allLoadedReviews.push({ id: doc.id, data: data });
+          html += buildCardHTML(doc.id, data, false);
+        });
+        container.innerHTML = html;
+      });
+  }
+}
+
+function buildCardHTML(id, d, isPending) {
+  const stars = '★'.repeat(d.rating) + '☆'.repeat(5 - d.rating);
+  let dateStr = 'უცნობი დრო';
+  if (d.createdAt) {
+    const date = new Date(d.createdAt.toDate());
+    dateStr = date.toLocaleDateString('ka-GE', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  const actionButtons = isPending ? `
+    <button class="btn-rj" onclick="handleReview('${id}', 'rejected')">✕ უარყოფა</button>
+    <button class="btn-ap" onclick="handleReview('${id}', 'approved')">✓ დამტკიცება</button>
+  ` : `
+    <button class="btn-rj" style="width:100%; flex:none;" onclick="handleReview('${id}', 'rejected', true)">🗑️ საიტიდან წაშლა (გადაფიქრება)</button>
+  `;
+
+  return `
+    <div class="rv-card">
+      <div class="rv-top">
+        <div class="rv-user">
+          <div class="rv-avi" style="background:${d.userBg || '#222'};">${d.userAvatar || '👤'}</div>
+          <div>
+            <div class="rv-name">${d.userName || 'მომხმარებელი'}</div>
+            <div class="rv-date">${dateStr}</div>
+          </div>
+        </div>
+      </div>
+      <div class="rv-target">📍 ობიექტი: ${d.restaurantId}</div>
+      <div class="rv-stars">${stars}</div>
+      <div class="rv-text">"${d.text}"</div>
+      <div class="rv-actions">${actionButtons}</div>
+    </div>
+  `;
+}
+
+// ლოკალური ფილტრაცია (ძებნა) დამტკიცებული კომენტარებისთვის
+function filterReviewsLocal() {
+  const query = document.getElementById('adminSearch').value.toLowerCase().trim();
+  const container = document.getElementById('reviews-container');
+  
+  const filtered = allLoadedReviews.filter(item => {
+    return item.data.userName.toLowerCase().includes(query) || 
+           item.data.text.toLowerCase().includes(query) || 
+           item.data.restaurantId.toLowerCase().includes(query);
+  });
+
+  document.getElementById('badge-count').textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty-state"><h2>🤷‍♂️ ვერაფერი მოიძებნა</h2><p>კრიტერიუმით კომენტარი არ არსებობს.</p></div>`;
+    return;
+  }
+
+  let html = '';
+  filtered.forEach(item => {
+    html += buildCardHTML(item.id, item.data, false);
+  });
+  container.innerHTML = html;
+}
+
+function handleReview(docId, newStatus, isDeleteAction = false) {
+  const confirmMsg = isDeleteAction 
+    ? 'ნამდვილად გსურს უკვე დამტკიცებული კომენტარის საიტიდან წაშლა?' 
+    : (newStatus === 'approved' ? 'ნამდვილად ამტკიცებ ამ კომენტარს?' : 'ნამდვილად გინდა ამ კომენტარის უარყოფა?');
+
+  if(confirm(confirmMsg)) {
+    db.collection("reviews").doc(docId).update({
+      status: newStatus
+    }).then(() => {
+      if(isDeleteAction) filterReviewsLocal(); // თუ წავშალეთ, ძებნა განახლდეს
+    }).catch((error) => {
+      console.error(error);
+      alert("❌ ოპერაცია ვერ შესრულდა.");
+    });
+  }
+}
+</script>
+</body>
+</html>
